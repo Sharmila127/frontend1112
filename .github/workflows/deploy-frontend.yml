@@ -8,23 +8,29 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # 1. Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
+      # 3. Install dependencies in the frontend folder
       - name: Install dependencies
         run: npm install
         working-directory: ./frontend
 
+      # 4. Build React app
       - name: Build React app
         run: npm run build
         working-directory: ./frontend
 
+      # 5. Configure AWS credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
@@ -32,10 +38,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      # 6. Deploy build folder to S3
       - name: Deploy to S3
         run: |
           aws s3 sync ./frontend/build s3://${{ secrets.S3_BUCKET_NAME }} --delete --acl public-read
 
+      # 7. Invalidate CloudFront cache
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \
