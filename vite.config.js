@@ -3,11 +3,11 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  root: '.',        // The frontend folder is the working directory in GitHub Actions
+  base: '/',       // '/' because app is at root of domain
   build: {
-    outDir: 'build', // Output folder for production build (frontend/build)
+    outDir: 'build',
   },
   server: {
-    port: 3000       // Local dev server port
-  }
+    port: 3000,
+  },
 });
