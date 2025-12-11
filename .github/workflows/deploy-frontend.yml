@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Checkout repository
+      # 1) Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4) Build React app at repo root
+      # 4) Build React app
       - name: Build React app
         run: npm run build
 
@@ -36,10 +36,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 6) Deploy build folder to S3
+      # 6) Deploy build folder to S3 (no ACLs)
       - name: Deploy to S3
         run: |
-          aws s3 sync ./build s3://${{ secrets.S3_BUCKET_NAME }} --delete --acl public-read
+          aws s3 sync ./build s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
       # 7) Invalidate CloudFront cache
       - name: Invalidate CloudFront cache
