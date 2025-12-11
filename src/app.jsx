@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 function App() {
   return (
-    <div>
-      <h1>Welcome to the React Portal</h1>
+    <div style={{ margin: '50px' }}>
+      <h1>Welcome to React Portal</h1>
       <Link to="/login">Go to Login</Link>
     </div>
   );
