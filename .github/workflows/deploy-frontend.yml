@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
+      # 1. Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -20,9 +20,9 @@ jobs:
         with:
           node-version: '20'
 
-      # 3. Install dependencies (use legacy-peer-deps to fix Vite conflicts)
+      # 3. Install dependencies (use legacy-peer-deps to avoid peer conflicts)
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install --legacy-peer-deps --registry=https://registry.npmjs.org/
 
       # 4. Build React app
       - name: Build React app
@@ -36,7 +36,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 6. Deploy to S3
+      # 6. Deploy build folder to S3
       - name: Deploy to S3
         run: |
           aws s3 sync ./build s3://${{ secrets.S3_BUCKET_NAME }} --delete --acl public-read
